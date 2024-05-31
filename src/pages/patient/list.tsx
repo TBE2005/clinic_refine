@@ -11,7 +11,6 @@ import {
   IconEdit,
   IconEye,
   IconPlus,
-  IconUserCheck,
   IconUsers,
   IconUsersPlus,
 } from "@tabler/icons-react";
@@ -24,6 +23,7 @@ import {
 } from "mantine-react-table";
 import React from "react";
 
+// @ts-ignore
 import { mkConfig, generateCsv, download } from "export-to-csv"; //or use your library of choice here
 
 const csvConfig = mkConfig({

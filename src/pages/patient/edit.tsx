@@ -70,7 +70,7 @@ export const PatientEdit = () => {
           Удалить пациента
         </Button>
         <RecordForm
-          handleSubmit={(values) => {
+          handleSubmit={(values: PatientRecord) => {
             record
               .mutateAsync({
                 resource: "patient_records/create",
@@ -90,7 +90,7 @@ export const PatientEdit = () => {
           <>
             <RecordForm
               initialValues={record}
-              handleSubmit={(data) => {
+              handleSubmit={(data : PatientRecord) => {
                 updateRecord(record.id, data).then(() => {
                   records.refetch();
                 });

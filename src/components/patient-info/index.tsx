@@ -2,7 +2,7 @@ import { List } from "@mantine/core";
 import { Patient } from "../../types";
 
 type Props = {
-  patient: Patient;
+  patient: any;
 };
 
 const PatientInfo = ({ patient }: Props) => {
@@ -14,7 +14,7 @@ const PatientInfo = ({ patient }: Props) => {
       <List.Item>
         Населенный пункт: {patient.inhabited_locality || "-"}
       </List.Item>
-      <List.Item>Дата рождения: {patient.birthday || "-"}</List.Item>
+      <List.Item>Дата рождения: {patient.birthday}</List.Item>
       <List.Item>Пол: {patient.gender}</List.Item>
       <List.Item>Бп: {patient.bp ? "Да" : "Нет"}</List.Item>
       <List.Item>Ишемия: {patient.ischemia ? "Да" : "Нет"}</List.Item>

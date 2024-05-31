@@ -69,9 +69,9 @@ export const UserList = () => {
         Cell: ({ cell }) => (
           <Select
             placeholder="Pick value"
-            value={cell.getValue()}
+            value={cell.getValue() as string}
             onChange={(val) => {
-              setRole(cell.row.original.id, val).then(() => {
+              setRole(cell.row.original.id, val as string).then(() => {
                 users.refetch();
               });
             }}
@@ -125,7 +125,7 @@ export const UserList = () => {
   return (
     <Group>
       <UserForm
-        handleSubmit={(values) =>
+        handleSubmit={(values: User) =>
           user
             .mutateAsync({ resource: "auth/registration", values })
             .then(() => {

@@ -15,16 +15,16 @@ const PatientForm = ({
   handleSubmit,
   initialValues,
 }: {
-  handleSubmit: (values: Patient) => void;
-  initialValues?: Patient;
+  handleSubmit: (values: any) => void;
+  initialValues?: any;
 }) => {
   const form = useForm({
     mode: "uncontrolled",
     initialValues: initialValues
       ? {
           ...initialValues,
-          birthday: Date.parse(initialValues.birthday)
-            ? new Date(initialValues.birthday)
+          birthday: Date.parse(initialValues?.birthday )
+            ? new Date(initialValues?.birthday ?? "")
             : new Date(),
         }
       : undefined,
