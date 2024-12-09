@@ -1,101 +1,226 @@
-import { L10n } from "@syncfusion/ej2-base";
-import { Patient } from "../../types";
-import api from "../../axios";
-import React from "react";
+import { ActionIcon, Box, Button, Flex, List, Tooltip } from "@mantine/core";
 import {
-  RangeDirective,
-  RangesDirective,
-  SheetDirective,
-  SheetsDirective,
-  SpreadsheetComponent,
-} from "@syncfusion/ej2-react-spreadsheet";
-L10n.load({
-  "ru-RU": {
-    spreadsheet: {
-      File: "Файл",
-      Home: "Главная",
-      Insert: "Вставить",
-      Formulas: "Формулы",
-      Data: "Данные",
-      View: "Вид",
-      Cut: "Вырезать",
-      Copy: "Копировать",
-      Paste: "Вставить",
-      PasteSpecial: "Специальная вставка",
-      All: "Все",
-      Values: "Значения",
-      Formats: "Форматы",
-      Font: "Шрифт",
-      FontSize: "Размер шрифта",
-      Bold: "Полужирный",
-      Italic: "Курсив",
-      Underline: "Подчеркнутый",
-      Strikethrough: "Зачеркнутый",
-      TextColor: "Цвет текста",
-      FillColor: "Цвет заливки",
-      HorizontalAlignment: "Горизонтальное выравнивание",
-      AlignLeft: "Выровнять по левому краю",
-      AlignCenter: "По центру",
-      AlignRight: "Выровнять по правому краю",
-      VerticalAlignment: "Вертикальное выравнивание",
-      AlignTop: "Выровнять по верхнему краю",
-      AlignMiddle: "По середине",
-      AlignBottom: "Выровнять по нижнему краю",
-      InsertFunction: "Вставить функцию",
-      Delete: "Удалить",
-      Rename: "Переименовать",
-      Hide: "Скрыть",
-      Unhide: "Показать",
-      NumberFormat: "Формат числа",
-      SaveAs: "Сохранить как",
-      Open: "Открыть",
-      New: "Новый",
-      Image: "Изображение",
-      Chart: "График",
-      Link: "Ссылка",
-      CustomSort: "Сортировка",
-      Filter: "Фильтр",
-      Equal: "Равно",
-      NotEqual: "Не равно",
-      StartsWith: "Начинается с",
-      EndsWith: "Заканчивается на",
-      Contains: "Содержит",
-      DoesNotContains: "Не содержит",
-      CustomFilter: "Пользовательский фильтр",
-      SelectAll: "Выбрать все",
-    },
-  },
+  useCreate,
+  useGetIdentity,
+  useList,
+  useNavigation,
+} from "@refinedev/core";
+import { Patient, User } from "../../types";
+import {
+  IconDownload,
+  IconEdit,
+  IconEye,
+  IconPlus,
+  IconUsers,
+  IconUsersPlus,
+} from "@tabler/icons-react";
+import {
+  MRT_ColumnDef,
+  MRT_RowVirtualizer,
+  MRT_SortingState,
+  MantineReactTable,
+  useMantineReactTable,
+} from "mantine-react-table";
+import React from "react";
+
+// @ts-ignore
+import { mkConfig, generateCsv, download } from "export-to-csv"; //or use your library of choice here
+
+const csvConfig = mkConfig({
+  fieldSeparator: ",",
+  decimalSeparator: ".",
+  useKeysAsHeaders: true,
 });
-const get = async () => {
-  return await api.post("patient/get_all", null, {
-    params: {
-      limit: 10000,
-    },
-  });
-};
 
 const Statistics = () => {
-  const [data, setData] = React.useState([] as Patient[]);
+  const navigation = useNavigation();
+  const user = useGetIdentity<User>();
+  const patientsByTherapist = useList<Patient>({
+    resource:
+      "patient/get_all_by_therapist?" +
+      new URLSearchParams({
+        limit: "10000",
+      }),
+    pagination: {
+      mode: "off",
+    },
+  });
+  const allPatients = useCreate();
+  const rowVirtualizerInstanceRef = React.useRef<MRT_RowVirtualizer>(null);
+  const [data, setData] = React.useState<Patient[]>([]);
+  const [sorting, setSorting] = React.useState<MRT_SortingState>([]);
+  const handleExportData = () => {
+    const csv = generateCsv(csvConfig)(data as any);
+    download(csvConfig)(csv);
+  };
+  const columns = React.useMemo<MRT_ColumnDef<Patient>[]>(
+    () => [
+      {
+        accessorKey: "birthday",
+        header: "Дата рождения",
+        filterVariant: "date-range",
+      },
+      {
+        accessorKey: "gender",
+        header: "Пол",
+        filterFn: "equals",
+        mantineFilterSelectProps: {
+          data: [
+            {
+              label: "Мужской",
+              value: "м",
+            },
+            {
+              label: "Женский",
+              value: "ж",
+            },
+          ],
+        },
+        filterVariant: "select",
+      },
+      {
+        accessorKey: "job_title",
+        header: "Должность",
+      },
+      {
+        accessorKey: "inhabited_locality",
+        header: "Населенный пункт",
+        mantineFilterSelectProps: {
+          data: [
+            {
+              label: "Город",
+              value: "Город",
+            },
+            {
+              label: "Район",
+              value: "Район",
+            },
+          ],
+        },
+        filterVariant: "select",
+      },
+      {
+        accessorKey: "bp",
+        header: "Бп",
+        Cell: ({ cell }) => (cell.getValue() ? "Да" : "Нет"),
+        filterVariant: "checkbox",
+      },
+      {
+        accessorKey: "ischemia",
+        header: "Ишемия",
+        Cell: ({ cell }) => (cell.getValue() ? "Да" : "Нет"),
+        filterVariant: "checkbox",
+      },
+      {
+        accessorKey: "dep",
+        header: "Дэп",
+        Cell: ({ cell }) => (cell.getValue() ? "Да" : "Нет"),
+        filterVariant: "checkbox",
+      },
+    ],
+    []
+  );
+  const table = useMantineReactTable({
+    columns,
+    data: data,
+    enableBottomToolbar: false,
+    enableColumnVirtualization: true,
+    enableGlobalFilterModes: true,
+    enablePagination: false,
+    enableColumnPinning: true,
+    enableRowVirtualization: true,
+    enableEditing: true,
+    mantineTableContainerProps: { style: { maxHeight: "600px" } },
+    onSortingChange: setSorting,
+    state: { isLoading: patientsByTherapist.isLoading, sorting },
+    rowVirtualizerInstanceRef, //optional
+    rowVirtualizerOptions: { overscan: 5 }, //optionally customize the row virtualizer
+    columnVirtualizerOptions: { overscan: 2 }, //optionally customize the column virtualizer
+    renderTopToolbarCustomActions: () => (
+      <Box
+        style={{
+          display: "flex",
+          gap: "16px",
+          padding: "8px",
+          flexWrap: "wrap",
+        }}
+      >
+        <Button
+          onClick={() => navigation.create("patient")}
+          rightSection={<IconPlus />}
+        >
+          Добавить
+        </Button>
+        {user.data?.is_superuser && (
+          <>
+            <Button
+              onClick={() => setData(patientsByTherapist?.data?.data ?? [])}
+              rightSection={<IconUsersPlus />}
+            >
+              Мои пациенты
+            </Button>
+            <Button
+              onClick={async () => {
+                await allPatients.mutateAsync({
+                  resource: "patient/get_all?limit=10000",
+                  values: {},
+                });
+                setData(allPatients.data?.data.patients ?? []);
+              }}
+              rightSection={<IconUsers />}
+            >
+              Все пациенты
+            </Button>
+          </>
+        )}
+
+        <Button
+          onClick={handleExportData}
+          rightSection={<IconDownload />}
+          variant="filled"
+        >
+          Экспорт
+        </Button>
+      </Box>
+    ),
+    renderRowActions: ({ row }) => (
+      <Flex gap="xs">
+        <Tooltip label="Редактировать">
+          <ActionIcon
+            onClick={() => navigation.edit("patient", row.original.id)}
+            size={"sm"}
+          >
+            <IconEdit />
+          </ActionIcon>
+        </Tooltip>
+        <Tooltip label="Открыть">
+          <ActionIcon
+            onClick={() => navigation.show("patient", row.original.id)}
+            size={"sm"}
+          >
+            <IconEye />
+          </ActionIcon>
+        </Tooltip>
+      </Flex>
+    ),
+  });
   React.useEffect(() => {
-    get().then((res) => {
-      setData(res.data.patients);
-    });
-  }, []);
+    if (typeof window !== "undefined" && patientsByTherapist.data?.data) {
+      setData(patientsByTherapist.data.data);
+    }
+  }, [patientsByTherapist.isSuccess, patientsByTherapist.data?.data]);
+  React.useEffect(() => {
+    try {
+      //scroll to the top of the table when the sorting changes
+      rowVirtualizerInstanceRef.current?.scrollToIndex(0);
+    } catch (e) {
+      console.log(e);
+    }
+  }, [sorting]);
   return (
-    <SpreadsheetComponent
-      saveUrl="https://services.syncfusion.com/react/production/api/spreadsheet/save"
-      openUrl="https://services.syncfusion.com/react/production/api/spreadsheet/open"
-      height={"800px"}
-      locale="ru-RU"
-    >
-      <SheetsDirective>
-        <SheetDirective name="Пациенты">
-          <RangesDirective>
-            <RangeDirective dataSource={data}></RangeDirective>
-          </RangesDirective>
-        </SheetDirective>
-      </SheetsDirective>
-    </SpreadsheetComponent>
+    <List>
+      <MantineReactTable table={table} />
+    </List>
   );
 };
 

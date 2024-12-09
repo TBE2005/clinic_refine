@@ -37,7 +37,7 @@ function App() {
           <RefineKbarProvider>
             <Refine
               dataProvider={dataProvider(
-                "https://clinic.universal-hub.site",
+                "https://back.universal-hub.site",
                 api
               )}
               routerProvider={routerBindings}

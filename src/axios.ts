@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = "https://clinic.universal-hub.site/";
+const baseURL = "https://back.universal-hub.site";
 
 const api = axios.create({
   baseURL,
@@ -26,4 +26,4 @@ api.interceptors.response.use(
   }
 );
 
-export default api
+export default api;
