@@ -9,7 +9,10 @@ export const PatientCreate = () => {
       handleSubmit={(values: Patient) =>
         patient.mutate({
           resource: "patient/create",
-          values,
+          values: {
+            ...values,
+            birthday: values.birthday?.toISOString().slice(0, 10),
+          },
         })
       }
     />
