@@ -23,9 +23,9 @@ const PatientForm = ({
     initialValues: initialValues
       ? {
           ...initialValues,
-          birthday: Date.parse(initialValues?.birthday )
-            ? new Date(initialValues?.birthday ?? "")
-            : new Date(),
+          birthday: Date.parse(initialValues?.birthday)
+            ? new Date(new Date(initialValues?.birthday).setHours(0, 0, 0, 0))
+            : new Date(new Date().setHours(0, 0, 0, 0)),
         }
       : undefined,
   });
@@ -60,6 +60,13 @@ const PatientForm = ({
         label="Дата рождения"
         placeholder="Выберите / введите дату рождения"
         clearable
+        onChange={(date) => {
+          if (date) {
+            form.setFieldValue("birthday", new Date(date.setHours(0, 0, 0, 0)));
+          } else {
+            form.setFieldValue("birthday", null);
+          }
+        }}
       />
       <Select
         label="Пол"
