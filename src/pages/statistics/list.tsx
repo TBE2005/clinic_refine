@@ -1,19 +1,7 @@
-import { ActionIcon, Box, Button, Flex, List, Tooltip } from "@mantine/core";
-import {
-  useCreate,
-  useGetIdentity,
-  useList,
-  useNavigation,
-} from "@refinedev/core";
-import { Patient, User } from "../../types";
-import {
-  IconDownload,
-  IconEdit,
-  IconEye,
-  IconPlus,
-  IconUsers,
-  IconUsersPlus,
-} from "@tabler/icons-react";
+import { Box, Button, List } from "@mantine/core";
+import { useList } from "@refinedev/core";
+import { Patient } from "../../types";
+import { IconDownload } from "@tabler/icons-react";
 import {
   MRT_ColumnDef,
   MRT_RowVirtualizer,
@@ -33,8 +21,6 @@ const csvConfig = mkConfig({
 });
 
 const Statistics = () => {
-  const navigation = useNavigation();
-  const user = useGetIdentity<User>();
   const patientsByTherapist = useList<Patient>({
     resource:
       "patient/get_all_by_therapist?" +
@@ -45,7 +31,6 @@ const Statistics = () => {
       mode: "off",
     },
   });
-  const allPatients = useCreate();
   const rowVirtualizerInstanceRef = React.useRef<MRT_RowVirtualizer>(null);
   const [data, setData] = React.useState<Patient[]>([]);
   const [sorting, setSorting] = React.useState<MRT_SortingState>([]);
@@ -146,35 +131,6 @@ const Statistics = () => {
         }}
       >
         <Button
-          onClick={() => navigation.create("patient")}
-          rightSection={<IconPlus />}
-        >
-          Добавить
-        </Button>
-        {user.data?.is_superuser && (
-          <>
-            <Button
-              onClick={() => setData(patientsByTherapist?.data?.data ?? [])}
-              rightSection={<IconUsersPlus />}
-            >
-              Мои пациенты
-            </Button>
-            <Button
-              onClick={async () => {
-                await allPatients.mutateAsync({
-                  resource: "patient/get_all?limit=10000",
-                  values: {},
-                });
-                setData(allPatients.data?.data.patients ?? []);
-              }}
-              rightSection={<IconUsers />}
-            >
-              Все пациенты
-            </Button>
-          </>
-        )}
-
-        <Button
           onClick={handleExportData}
           rightSection={<IconDownload />}
           variant="filled"
@@ -182,26 +138,6 @@ const Statistics = () => {
           Экспорт
         </Button>
       </Box>
-    ),
-    renderRowActions: ({ row }) => (
-      <Flex gap="xs">
-        <Tooltip label="Редактировать">
-          <ActionIcon
-            onClick={() => navigation.edit("patient", row.original.id)}
-            size={"sm"}
-          >
-            <IconEdit />
-          </ActionIcon>
-        </Tooltip>
-        <Tooltip label="Открыть">
-          <ActionIcon
-            onClick={() => navigation.show("patient", row.original.id)}
-            size={"sm"}
-          >
-            <IconEye />
-          </ActionIcon>
-        </Tooltip>
-      </Flex>
     ),
   });
   React.useEffect(() => {
