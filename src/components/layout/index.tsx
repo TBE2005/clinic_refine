@@ -38,20 +38,16 @@ export const Layout: React.FC<PropsWithChildren> = ({ children }) => {
 
       <AppShell.Navbar p="md">
         {menu.menuItems.map((item) =>
-          item.name === "users" ? (
-            <>
-              {user?.data?.is_superuser && (
-                <NavLink
-                  component={Link}
-                  key={item.key}
-                  to={item.route ?? "/"}
-                  label={item.label}
-                  active={item.key === menu.selectedKey}
-                  rightSection={item.icon}
-                  onClick={toggle}
-                />
-              )}
-            </>
+          user?.data?.is_superuser && item.name === "users" ? (
+            <NavLink
+              component={Link}
+              key={item.key}
+              to={item.route ?? "/"}
+              label={item.label}
+              active={item.key === menu.selectedKey}
+              rightSection={item.icon}
+              onClick={toggle}
+            />
           ) : (
             <NavLink
               component={Link}
