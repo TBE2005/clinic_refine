@@ -16,8 +16,6 @@ import { BarChart, LineChart, PieChart } from "@mantine/charts";
 import { mkConfig, generateCsv, download } from "export-to-csv"; //or use your library of choice here
 
 const csvConfig = mkConfig({
-  fieldSeparator: ',',
-  decimalSeparator: '.',
   useKeysAsHeaders: true,
   filename: 'статистика пациентов'
 });
