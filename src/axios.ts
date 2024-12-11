@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const baseURL = "http://localhost:8000";
+export const baseURL = "https://back.universal-hub.site";
 
 
 const api = axios.create({
