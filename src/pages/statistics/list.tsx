@@ -208,7 +208,7 @@ const Statistics = () => {
                 name: "Мужской",
                 value:
                   data.filter((e) => e.gender === "м" || e.gender === "М")
-                    .length + 120000,
+                    .length,
                 color: "indigo.6",
               },
               {
