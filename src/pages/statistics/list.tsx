@@ -411,7 +411,7 @@ const Statistics = () => {
             data={Array.from(
               new Set(data.map((e) => getFullYear(e.birthday || "")))
             )
-              .filter((e) => e !== null)
+              .filter((age): age is number => age !== null)
               .sort((a, b) => a - b)
               .map((age) => {
                 return {
