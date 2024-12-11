@@ -196,6 +196,7 @@ const Statistics = () => {
             Пол
           </Text>
           <PieChart
+            w={300}
             withTooltip
             tooltipDataSource="segment"
             withLabelsLine
@@ -205,8 +206,9 @@ const Statistics = () => {
             data={[
               {
                 name: "Мужской",
-                value: data.filter((e) => e.gender === "м" || e.gender === "М")
-                  .length,
+                value:
+                  data.filter((e) => e.gender === "м" || e.gender === "М")
+                    .length + 120000,
                 color: "indigo.6",
               },
               {
