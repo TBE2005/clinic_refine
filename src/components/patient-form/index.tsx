@@ -33,7 +33,7 @@ const PatientForm = ({
     validate: {
       gender: (value) => (!value ? "Пол обязательно" : null),
       full_name: (value) =>
-        /^[А-ЯЁ][а-яё]+ [А-ЯЁ][а-яё]+ [А-ЯЁ][а-яё]+$/u.test(value)
+        !/^[А-ЯЁ][а-яё]+ [А-ЯЁ][а-яё]+ [А-ЯЁ][а-яё]+$/u.test(value)
           ? `Формат фио - "Имя Отчество Фамилия"`
           : null,
     },
