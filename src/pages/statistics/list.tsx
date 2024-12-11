@@ -1,5 +1,5 @@
 import { Box, Button, List, Text, Group } from "@mantine/core";
-import { useCreate, useList } from "@refinedev/core";
+import { useCreate } from "@refinedev/core";
 import { Patient } from "../../types";
 import { IconDownload } from "@tabler/icons-react";
 import {
@@ -21,22 +21,22 @@ const csvConfig = mkConfig({
   useKeysAsHeaders: true,
 });
 
-function getFullYear(date: Date | string) {
+function getFullYear(birthDate: Date | string) {
   const today = new Date();
-    const birth = new Date(birthDate);
-    
-    if (isNaN(birth.getTime())) {
-      return null;
-    }
-    
-    let age = today.getFullYear() - birth.getFullYear();
-    const monthDiff = today.getMonth() - birth.getMonth();
-    
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
-      age--;
-    }
-    
-    return age;
+  const birth = new Date(birthDate);
+
+  if (isNaN(birth.getTime())) {
+    return null;
+  }
+
+  let age = today.getFullYear() - birth.getFullYear();
+  const monthDiff = today.getMonth() - birth.getMonth();
+
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+    age--;
+  }
+
+  return age;
 }
 
 const Statistics = () => {
@@ -45,7 +45,18 @@ const Statistics = () => {
   const [data, setData] = React.useState<Patient[]>([]);
   const [sorting, setSorting] = React.useState<MRT_SortingState>([]);
   const handleExportData = () => {
-    const csv = generateCsv(csvConfig)(data as any);
+    const csv = generateCsv(csvConfig)(
+      table.getFilteredRowModel().rows.map((e) => {
+        return {
+          "День рождения": e.original.birthday,
+          Пол: e.original.gender,
+          "Населенный пункт": e.original.inhabited_locality,
+          БП: e.original.bp,
+          Ишемия: e.original.ischemia,
+          ДЭП: e.original.dep,
+        };
+      }) as any
+    );
     download(csvConfig)(csv);
   };
   const columns = React.useMemo<MRT_ColumnDef<Patient>[]>(
@@ -120,7 +131,6 @@ const Statistics = () => {
     enablePagination: false,
     enableColumnPinning: true,
     enableRowVirtualization: true,
-    enableEditing: true,
     mantineTableContainerProps: { style: { maxHeight: "600px" } },
     onSortingChange: setSorting,
     state: { isLoading: allPatients.isLoading, sorting },
@@ -401,6 +411,7 @@ const Statistics = () => {
             data={Array.from(
               new Set(data.map((e) => getFullYear(e.birthday || "")))
             )
+              .filter((e) => e !== null)
               .sort((a, b) => a - b)
               .map((age) => {
                 return {
