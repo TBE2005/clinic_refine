@@ -27,8 +27,6 @@ import React from "react";
 import { mkConfig, generateCsv, download } from "export-to-csv"; //or use your library of choice here
 
 const csvConfig = mkConfig({
-  fieldSeparator: ',',
-  decimalSeparator: '.',
   useKeysAsHeaders: true,
   filename: 'пациенты'
 });
