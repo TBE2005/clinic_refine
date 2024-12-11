@@ -283,7 +283,7 @@ const Statistics = () => {
                 value: table
                   .getFilteredRowModel()
                   .rows.map((e) => e.original)
-                  .filter((e) => e.inhabited_locality === "Район").length,
+                  .filter((e) => e.inhabited_locality !== "Город").length,
                 color: "yellow.6",
               },
             ]}
@@ -349,7 +349,7 @@ const Statistics = () => {
         </div>
         <div>
           <Text fz="xs" mb="sm" ta="center">
-            Населенный пункт по полу
+             Болезнь по населенному пункту
           </Text>
           <BarChart
             w={300}
@@ -378,17 +378,17 @@ const Statistics = () => {
                 БП: table
                   .getFilteredRowModel()
                   .rows.map((e) => e.original)
-                  .filter((e) => e.bp && e.inhabited_locality === "Район")
+                  .filter((e) => e.bp && e.inhabited_locality !== "Город")
                   .length,
                 Ишемия: table
                   .getFilteredRowModel()
                   .rows.map((e) => e.original)
-                  .filter((e) => e.ischemia && e.inhabited_locality === "Район")
+                  .filter((e) => e.ischemia && e.inhabited_locality !== "Город")
                   .length,
                 ДЭП: table
                   .getFilteredRowModel()
                   .rows.map((e) => e.original)
-                  .filter((e) => e.dep && e.inhabited_locality === "Район")
+                  .filter((e) => e.dep && e.inhabited_locality !== "Город")
                   .length,
               },
             ]}
