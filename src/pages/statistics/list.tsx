@@ -160,6 +160,12 @@ const Statistics = () => {
   }, [sorting]);
   return (
     <List>
+      <Text fz="xs" mb="sm" ta="center">
+        Всего: {data.length}
+      </Text>
+      <Text fz="xs" mb="sm" ta="center">
+        Найдено: {table.getFilteredRowModel().rows.length}
+      </Text>
       <Group gap={50} mb={10} display={"flex"}>
         <div>
           <Text fz="xs" mb="sm" ta="center">
@@ -175,17 +181,26 @@ const Statistics = () => {
             data={[
               {
                 name: "БП",
-                value: data.filter((e) => e.bp).length,
+                value: table
+                  .getFilteredRowModel()
+                  .rows.map((e) => e.original)
+                  .filter((e) => e.bp).length,
                 color: "indigo.6",
               },
               {
                 name: "ДЭП",
-                value: data.filter((e) => e.dep).length,
+                value: table
+                  .getFilteredRowModel()
+                  .rows.map((e) => e.original)
+                  .filter((e) => e.dep).length,
                 color: "yellow.6",
               },
               {
                 name: "Ишемия",
-                value: data.filter((e) => e.ischemia).length,
+                value: table
+                  .getFilteredRowModel()
+                  .rows.map((e) => e.original)
+                  .filter((e) => e.ischemia).length,
                 color: "teal.6",
               },
             ]}
@@ -206,15 +221,18 @@ const Statistics = () => {
             data={[
               {
                 name: "Мужской",
-                value:
-                  data.filter((e) => e.gender === "м" || e.gender === "М")
-                    .length,
+                value: table
+                  .getFilteredRowModel()
+                  .rows.map((e) => e.original)
+                  .filter((e) => e.gender === "м" || e.gender === "М").length,
                 color: "indigo.6",
               },
               {
                 name: "Женский",
-                value: data.filter((e) => e.gender === "ж" || e.gender === "Ж")
-                  .length,
+                value: table
+                  .getFilteredRowModel()
+                  .rows.map((e) => e.original)
+                  .filter((e) => e.gender === "ж" || e.gender === "Ж").length,
                 color: "yellow.6",
               },
             ]}
@@ -234,14 +252,18 @@ const Statistics = () => {
             data={[
               {
                 name: "Город",
-                value: data.filter((e) => e.inhabited_locality === "Город")
-                  .length,
+                value: table
+                  .getFilteredRowModel()
+                  .rows.map((e) => e.original)
+                  .filter((e) => e.inhabited_locality === "Город").length,
                 color: "indigo.6",
               },
               {
                 name: "Район",
-                value: data.filter((e) => e.inhabited_locality === "Район")
-                  .length,
+                value: table
+                  .getFilteredRowModel()
+                  .rows.map((e) => e.original)
+                  .filter((e) => e.inhabited_locality === "Район").length,
                 color: "yellow.6",
               },
             ]}
@@ -257,27 +279,43 @@ const Statistics = () => {
             data={[
               {
                 gender: "М",
-                БП: data.filter(
-                  (e) => e.bp && (e.gender === "м" || e.gender === "М")
-                ).length,
-                Ишемия: data.filter(
-                  (e) => e.ischemia && (e.gender === "м" || e.gender === "М")
-                ).length,
-                ДЭП: data.filter(
-                  (e) => e.dep && (e.gender === "м" || e.gender === "М")
-                ).length,
+                БП: table
+                  .getFilteredRowModel()
+                  .rows.map((e) => e.original)
+                  .filter((e) => e.bp && (e.gender === "м" || e.gender === "М"))
+                  .length,
+                Ишемия: table
+                  .getFilteredRowModel()
+                  .rows.map((e) => e.original)
+                  .filter(
+                    (e) => e.ischemia && (e.gender === "м" || e.gender === "М")
+                  ).length,
+                ДЭП: table
+                  .getFilteredRowModel()
+                  .rows.map((e) => e.original)
+                  .filter(
+                    (e) => e.dep && (e.gender === "м" || e.gender === "М")
+                  ).length,
               },
               {
                 gender: "Ж",
-                БП: data.filter(
-                  (e) => e.bp && (e.gender === "ж" || e.gender === "Ж")
-                ).length,
-                Ишемия: data.filter(
-                  (e) => e.ischemia && (e.gender === "ж" || e.gender === "Ж")
-                ).length,
-                ДЭП: data.filter(
-                  (e) => e.dep && (e.gender === "ж" || e.gender === "Ж")
-                ).length,
+                БП: table
+                  .getFilteredRowModel()
+                  .rows.map((e) => e.original)
+                  .filter((e) => e.bp && (e.gender === "ж" || e.gender === "Ж"))
+                  .length,
+                Ишемия: table
+                  .getFilteredRowModel()
+                  .rows.map((e) => e.original)
+                  .filter(
+                    (e) => e.ischemia && (e.gender === "ж" || e.gender === "Ж")
+                  ).length,
+                ДЭП: table
+                  .getFilteredRowModel()
+                  .rows.map((e) => e.original)
+                  .filter(
+                    (e) => e.dep && (e.gender === "ж" || e.gender === "Ж")
+                  ).length,
               },
             ]}
             dataKey="gender"
@@ -299,25 +337,39 @@ const Statistics = () => {
             data={[
               {
                 inhabited_locality: "Город",
-                БП: data.filter((e) => e.bp && e.inhabited_locality === "Город")
+                БП: table
+                  .getFilteredRowModel()
+                  .rows.map((e) => e.original)
+                  .filter((e) => e.bp && e.inhabited_locality === "Город")
                   .length,
-                Ишемия: data.filter(
-                  (e) => e.ischemia && e.inhabited_locality === "Город"
-                ).length,
-                ДЭП: data.filter(
-                  (e) => e.dep && e.inhabited_locality === "Город"
-                ).length,
+                Ишемия: table
+                  .getFilteredRowModel()
+                  .rows.map((e) => e.original)
+                  .filter((e) => e.ischemia && e.inhabited_locality === "Город")
+                  .length,
+                ДЭП: table
+                  .getFilteredRowModel()
+                  .rows.map((e) => e.original)
+                  .filter((e) => e.dep && e.inhabited_locality === "Город")
+                  .length,
               },
               {
                 inhabited_locality: "Район",
-                БП: data.filter((e) => e.bp && e.inhabited_locality === "Район")
+                БП: table
+                  .getFilteredRowModel()
+                  .rows.map((e) => e.original)
+                  .filter((e) => e.bp && e.inhabited_locality === "Район")
                   .length,
-                Ишемия: data.filter(
-                  (e) => e.ischemia && e.inhabited_locality === "Район"
-                ).length,
-                ДЭП: data.filter(
-                  (e) => e.dep && e.inhabited_locality === "Район"
-                ).length,
+                Ишемия: table
+                  .getFilteredRowModel()
+                  .rows.map((e) => e.original)
+                  .filter((e) => e.ischemia && e.inhabited_locality === "Район")
+                  .length,
+                ДЭП: table
+                  .getFilteredRowModel()
+                  .rows.map((e) => e.original)
+                  .filter((e) => e.dep && e.inhabited_locality === "Район")
+                  .length,
               },
             ]}
             dataKey="inhabited_locality"
@@ -343,15 +395,24 @@ const Statistics = () => {
               .map((age) => {
                 return {
                   age,
-                  БП: data.filter(
-                    (e) => getFullYear(e.birthday || "") === age && e.bp
-                  ).length,
-                  ДЭП: data.filter(
-                    (e) => getFullYear(e.birthday || "") === age && e.dep
-                  ).length,
-                  Ишемия: data.filter(
-                    (e) => getFullYear(e.birthday || "") === age && e.ischemia
-                  ).length,
+                  БП: table
+                    .getFilteredRowModel()
+                    .rows.map((e) => e.original)
+                    .filter(
+                      (e) => getFullYear(e.birthday || "") === age && e.bp
+                    ).length,
+                  ДЭП: table
+                    .getFilteredRowModel()
+                    .rows.map((e) => e.original)
+                    .filter(
+                      (e) => getFullYear(e.birthday || "") === age && e.dep
+                    ).length,
+                  Ишемия: table
+                    .getFilteredRowModel()
+                    .rows.map((e) => e.original)
+                    .filter(
+                      (e) => getFullYear(e.birthday || "") === age && e.ischemia
+                    ).length,
                 };
               })}
             dataKey="age"
