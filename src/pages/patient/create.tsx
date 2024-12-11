@@ -13,9 +13,13 @@ export const PatientCreate = () => {
         try {
           await patient.mutateAsync({
             resource: "patient/create",
-            values: {
+            values:{
               ...values,
-              birthday: values.birthday?.toISOString().slice(0, 10),
+              birthday: new Date(
+                new Date(values.birthday || "").setUTCHours(0, 0, 0, 0)
+              )
+                .toISOString()
+                .slice(0, 10),
             },
           });
           list("patient");
