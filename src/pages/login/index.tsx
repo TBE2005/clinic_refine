@@ -10,9 +10,9 @@ export const Login = () => {
     // functions will be used to validate values at corresponding key
     validate: {
       username: (value) =>
-        value.length < 2 ? "Name must have at least 2 letters" : null,
+        value.length < 2 ? "Имя больше двух букв" : null,
       password: (value) =>
-        value.length < 2 ? "Name must have at least 2 letters" : null,
+        value.length < 2 ? "Пароль больше двух букв" : null,
     },
   });
   return (

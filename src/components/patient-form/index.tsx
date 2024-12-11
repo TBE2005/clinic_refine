@@ -24,10 +24,19 @@ const PatientForm = ({
       ? {
           ...initialValues,
           birthday: Date.parse(initialValues?.birthday)
-            ? new Date(new Date(initialValues?.birthday).setHours(0, 0, 0, 0))
-            : new Date(new Date().setHours(0, 0, 0, 0)),
+            ? new Date(
+                new Date(initialValues?.birthday).setUTCHours(0, 0, 0, 0)
+              )
+            : new Date(new Date().setUTCHours(0, 0, 0, 0)),
         }
       : undefined,
+    validate: {
+      gender: (value) => (!value ? "Пол обязательно" : null),
+      full_name: (value) =>
+        /^[А-ЯЁ][а-яё]+ [А-ЯЁ][а-яё]+ [А-ЯЁ][а-яё]+$/u.test(value)
+          ? `Формат фио - "Имя Отчество Фамилия"`
+          : null,
+    },
   });
   return (
     <form
@@ -62,7 +71,10 @@ const PatientForm = ({
         clearable
         onChange={(date) => {
           if (date) {
-            form.setFieldValue("birthday", new Date(date.setHours(0, 0, 0, 0)));
+            form.setFieldValue(
+              "birthday",
+              new Date(date.setUTCHours(0, 0, 0, 0))
+            );
           } else {
             form.setFieldValue("birthday", null);
           }

@@ -75,8 +75,8 @@ export const PatientEdit = () => {
         )}
         <Button
           color="red"
-          onClick={() => {
-            deletePatient(params.id ?? "");
+          onClick={async () => {
+            await deletePatient(params.id ?? "");
             list("patient");
           }}
         >
