@@ -1,5 +1,5 @@
 import { Box, Button, List, Text, Group } from "@mantine/core";
-import { useList } from "@refinedev/core";
+import { useCreate, useList } from "@refinedev/core";
 import { Patient } from "../../types";
 import { IconDownload } from "@tabler/icons-react";
 import {
@@ -26,16 +26,7 @@ function getFullYear(date: Date | string) {
 }
 
 const Statistics = () => {
-  const patientsByTherapist = useList<Patient>({
-    resource:
-      "patient/get_all_by_therapist?" +
-      new URLSearchParams({
-        limit: "10000",
-      }),
-    pagination: {
-      mode: "off",
-    },
-  });
+  const allPatients = useCreate();
   const rowVirtualizerInstanceRef = React.useRef<MRT_RowVirtualizer>(null);
   const [data, setData] = React.useState<Patient[]>([]);
   const [sorting, setSorting] = React.useState<MRT_SortingState>([]);
@@ -122,7 +113,7 @@ const Statistics = () => {
     enableEditing: true,
     mantineTableContainerProps: { style: { maxHeight: "600px" } },
     onSortingChange: setSorting,
-    state: { isLoading: patientsByTherapist.isLoading, sorting },
+    state: { isLoading: allPatients.isLoading, sorting },
     rowVirtualizerInstanceRef, //optional
     rowVirtualizerOptions: { overscan: 5 }, //optionally customize the row virtualizer
     columnVirtualizerOptions: { overscan: 2 }, //optionally customize the column virtualizer
@@ -146,10 +137,19 @@ const Statistics = () => {
     ),
   });
   React.useEffect(() => {
-    if (typeof window !== "undefined" && patientsByTherapist.data?.data) {
-      setData(patientsByTherapist.data.data);
+    async function getAll() {
+      try {
+        const data = await allPatients.mutateAsync({
+          resource: "patient/get_all?limit=10000",
+          values: {},
+        });
+        setData(data.data.patients ?? []);
+      } catch (error) {
+        console.log(error);
+      }
     }
-  }, [patientsByTherapist.isSuccess, patientsByTherapist.data?.data]);
+    getAll();
+  }, []);
   React.useEffect(() => {
     try {
       //scroll to the top of the table when the sorting changes
@@ -160,7 +160,7 @@ const Statistics = () => {
   }, [sorting]);
   return (
     <List>
-      <Group gap={50} mb={10} display={'flex'}>
+      <Group gap={50} mb={10} display={"flex"}>
         <div>
           <Text fz="xs" mb="sm" ta="center">
             Болезнь

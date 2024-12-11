@@ -37,29 +37,34 @@ export const Layout: React.FC<PropsWithChildren> = ({ children }) => {
       </AppShell.Header>
 
       <AppShell.Navbar p="md">
-        {menu.menuItems.map((item) =>
-          user?.data?.is_superuser && item.name === "users" ? (
-            <NavLink
-              component={Link}
-              key={item.key}
-              to={item.route ?? "/"}
-              label={item.label}
-              active={item.key === menu.selectedKey}
-              rightSection={item.icon}
-              onClick={toggle}
-            />
-          ) : (
-            <NavLink
-              component={Link}
-              key={item.key}
-              to={item.route ?? "/"}
-              label={item.label}
-              active={item.key === menu.selectedKey}
-              rightSection={item.icon}
-              onClick={toggle}
-            />
-          )
+        {user?.data?.role === 'therapist' && (
+          <NavLink
+            component={Link}
+            to={"/patient"}
+            label={"Пациенты"}
+            active={"/patient" === menu.selectedKey}
+            // rightSection={item.icon}
+            onClick={toggle}
+          />
         )}
+        {user?.data?.is_superuser && (
+          <NavLink
+            component={Link}
+            to={"/users"}
+            label={"Пользователи"}
+            active={"/users" === menu.selectedKey}
+            // rightSection={item.icon}
+            onClick={toggle}
+          />
+        )}
+         <NavLink
+            component={Link}
+            to={"/statistics"}
+            label={"Статистика"}
+            active={"/statistics" === menu.selectedKey}
+            // rightSection={item.icon}
+            onClick={toggle}
+          />
       </AppShell.Navbar>
 
       <AppShell.Main>{children}</AppShell.Main>

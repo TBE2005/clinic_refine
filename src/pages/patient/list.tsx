@@ -169,11 +169,11 @@ export const PatientList = () => {
             </Button>
             <Button
               onClick={async () => {
-                await allPatients.mutateAsync({
+                const data = await allPatients.mutateAsync({
                   resource: "patient/get_all?limit=10000",
                   values: {},
                 });
-                setData(allPatients.data?.data.patients ?? []);
+                setData(data.data.patients ?? []);
               }}
               rightSection={<IconUsers />}
             >
@@ -212,6 +212,11 @@ export const PatientList = () => {
       </Flex>
     ),
   });
+  React.useEffect(() => {
+    if (user.data?.role === "explorer") {
+      navigation.list("statistics");
+    }
+  }, [user.data]);
   React.useEffect(() => {
     if (typeof window !== "undefined" && patientsByTherapist.data?.data) {
       setData(patientsByTherapist.data.data);

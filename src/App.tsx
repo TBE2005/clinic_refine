@@ -24,7 +24,7 @@ import {
   IconUsers,
   IconUsersPlus,
 } from "@tabler/icons-react";
-import api from "./axios";
+import api, { baseURL } from "./axios";
 
 const theme = createTheme({
   /** Put your mantine theme override here */
@@ -37,7 +37,7 @@ function App() {
           <RefineKbarProvider>
             <Refine
               dataProvider={dataProvider(
-                "https://back.universal-hub.site",
+                baseURL,
                 api
               )}
               routerProvider={routerBindings}
