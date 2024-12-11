@@ -69,16 +69,6 @@ const PatientForm = ({
         label="Дата рождения"
         placeholder="Выберите / введите дату рождения"
         clearable
-        onChange={(date) => {
-          if (date) {
-            form.setFieldValue(
-              "birthday",
-              new Date(date.setUTCHours(0, 0, 0, 0))
-            );
-          } else {
-            form.setFieldValue("birthday", null);
-          }
-        }}
       />
       <Select
         label="Пол"
