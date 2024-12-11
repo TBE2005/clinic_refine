@@ -264,6 +264,7 @@ const Statistics = () => {
             Населенный пункт
           </Text>
           <PieChart
+            w={300}
             withTooltip
             tooltipDataSource="segment"
             withLabelsLine
