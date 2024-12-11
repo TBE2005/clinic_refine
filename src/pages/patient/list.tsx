@@ -50,7 +50,21 @@ export const PatientList = () => {
   const [data, setData] = React.useState<Patient[]>([]);
   const [sorting, setSorting] = React.useState<MRT_SortingState>([]);
   const handleExportData = () => {
-    const csv = generateCsv(csvConfig)(data as any);
+    const csv = generateCsv(csvConfig)(
+      table.getFilteredRowModel().rows.map((e) => {
+        return {
+          ФИО: e.original.full_name,
+          "День рождения": e.original.birthday,
+          Пол: e.original.gender,
+          Должность: e.original.job_title,
+          "Населенный пункт": e.original.inhabited_locality,
+          "Место жительства": e.original.living_place,
+          БП: e.original.bp,
+          Ишемия: e.original.ischemia,
+          ДЭП: e.original.dep,
+        };
+      }) as any
+    );
     download(csvConfig)(csv);
   };
   const columns = React.useMemo<MRT_ColumnDef<Patient>[]>(
@@ -192,7 +206,7 @@ export const PatientList = () => {
       </Box>
     ),
     renderRowActions: ({ row }) => (
-      <Flex gap="xs">
+      <Flex gap="xs" wrap={'wrap'}>
         <Tooltip label="Редактировать">
           <ActionIcon
             onClick={() => navigation.edit("patient", row.original.id)}
