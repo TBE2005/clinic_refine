@@ -60,10 +60,6 @@ const Statistics = () => {
         filterVariant: "select",
       },
       {
-        accessorKey: "job_title",
-        header: "Должность",
-      },
-      {
         accessorKey: "inhabited_locality",
         header: "Населенный пункт",
         mantineFilterSelectProps: {
