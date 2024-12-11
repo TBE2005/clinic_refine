@@ -13,7 +13,7 @@ export interface User {
 
 export interface Patient {
   birthday?: Date;
-  gender?: "м" | "ж";
+  gender?: "м" | "ж" | "М" | "Ж";
   full_name?: string;
   living_place?: string;
   job_title?: string;

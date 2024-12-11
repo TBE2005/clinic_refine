@@ -13,7 +13,12 @@ import "./App.css";
 import authProvider from "./authProvider";
 import { Login } from "./pages/login";
 import { Layout } from "./components/layout";
-import { PatientCreate, PatientEdit, PatientList, PatientShow } from "./pages/patient";
+import {
+  PatientCreate,
+  PatientEdit,
+  PatientList,
+  PatientShow,
+} from "./pages/patient";
 import Statistics from "./pages/statistics/list";
 import UserList from "./pages/user/list";
 import { ModalsProvider } from "@mantine/modals";
@@ -25,6 +30,7 @@ import {
   IconUsersPlus,
 } from "@tabler/icons-react";
 import api, { baseURL } from "./axios";
+import { Notifications } from "@mantine/notifications";
 
 const theme = createTheme({
   /** Put your mantine theme override here */
@@ -33,13 +39,11 @@ function App() {
   return (
     <BrowserRouter>
       <MantineProvider theme={theme}>
+        <Notifications />
         <ModalsProvider>
           <RefineKbarProvider>
             <Refine
-              dataProvider={dataProvider(
-                baseURL,
-                api
-              )}
+              dataProvider={dataProvider(baseURL, api)}
               routerProvider={routerBindings}
               authProvider={authProvider}
               options={{

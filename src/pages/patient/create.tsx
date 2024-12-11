@@ -1,20 +1,26 @@
 import { useCreate } from "@refinedev/core";
 import PatientForm from "../../components/patient-form";
 import { Patient } from "../../types";
+import { useNavigation } from "@refinedev/core";
 
 export const PatientCreate = () => {
   const patient = useCreate();
+  const { list } = useNavigation();
+
   return (
     <PatientForm
-      handleSubmit={(values: Patient) =>
-        patient.mutate({
-          resource: "patient/create",
-          values: {
-            ...values,
-            birthday: values.birthday?.toISOString().slice(0, 10),
-          },
-        })
-      }
+      handleSubmit={async (values: Patient) => {
+        try {
+          await patient.mutateAsync({
+            resource: "patient/create",
+            values: {
+              ...values,
+              birthday: values.birthday?.toISOString().slice(0, 10),
+            },
+          });
+          list("patient");
+        } catch (error) {}
+      }}
     />
   );
 };

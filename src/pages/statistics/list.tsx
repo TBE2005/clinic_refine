@@ -205,12 +205,14 @@ const Statistics = () => {
             data={[
               {
                 name: "Мужской",
-                value: data.filter((e) => e.gender === "м").length,
+                value: data.filter((e) => e.gender === "м" || e.gender === "М")
+                  .length,
                 color: "indigo.6",
               },
               {
                 name: "Женский",
-                value: data.filter((e) => e.gender === "ж").length,
+                value: data.filter((e) => e.gender === "ж" || e.gender === "Ж")
+                  .length,
                 color: "yellow.6",
               },
             ]}
@@ -253,17 +255,27 @@ const Statistics = () => {
             data={[
               {
                 gender: "М",
-                БП: data.filter((e) => e.bp && e.gender === "м").length,
-                Ишемия: data.filter((e) => e.ischemia && e.gender === "м")
-                  .length,
-                ДЭП: data.filter((e) => e.dep && e.gender === "м").length,
+                БП: data.filter(
+                  (e) => e.bp && (e.gender === "м" || e.gender === "М")
+                ).length,
+                Ишемия: data.filter(
+                  (e) => e.ischemia && (e.gender === "м" || e.gender === "М")
+                ).length,
+                ДЭП: data.filter(
+                  (e) => e.dep && (e.gender === "м" || e.gender === "М")
+                ).length,
               },
               {
                 gender: "Ж",
-                БП: data.filter((e) => e.bp && e.gender === "ж").length,
-                Ишемия: data.filter((e) => e.ischemia && e.gender === "ж")
-                  .length,
-                ДЭП: data.filter((e) => e.dep && e.gender === "ж").length,
+                БП: data.filter(
+                  (e) => e.bp && (e.gender === "ж" || e.gender === "Ж")
+                ).length,
+                Ишемия: data.filter(
+                  (e) => e.ischemia && (e.gender === "ж" || e.gender === "Ж")
+                ).length,
+                ДЭП: data.filter(
+                  (e) => e.dep && (e.gender === "ж" || e.gender === "Ж")
+                ).length,
               },
             ]}
             dataKey="gender"

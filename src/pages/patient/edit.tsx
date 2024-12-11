@@ -7,6 +7,7 @@ import { Button, Flex, Stack } from "@mantine/core";
 import { get, getRecords } from "./show";
 import { useCreate, useList } from "@refinedev/core";
 import { PatientRecord } from "../../types";
+import { useNavigation } from "@refinedev/core";
 
 const updatePatiet = async (patient_id: string, data: any) => {
   return await api.patch("patient/update", data, {
@@ -51,6 +52,7 @@ export const PatientEdit = () => {
       mode: "off",
     },
   });
+  const { list } = useNavigation();
 
   React.useEffect(() => {
     get(params.id ?? "").then((res) => {
@@ -63,10 +65,21 @@ export const PatientEdit = () => {
         {patient && (
           <PatientForm
             initialValues={patient}
-            handleSubmit={(values) => updatePatiet(params.id ?? "", values)}
+            handleSubmit={(values) =>
+              updatePatiet(params.id ?? "", {
+                ...values,
+                birthday: values.birthday?.toISOString().slice(0, 10),
+              })
+            }
           />
         )}
-        <Button color="red" onClick={() => deletePatient(params.id ?? "")}>
+        <Button
+          color="red"
+          onClick={() => {
+            deletePatient(params.id ?? "");
+            list("patient");
+          }}
+        >
           Удалить пациента
         </Button>
         <RecordForm
@@ -90,7 +103,7 @@ export const PatientEdit = () => {
           <>
             <RecordForm
               initialValues={record}
-              handleSubmit={(data : PatientRecord) => {
+              handleSubmit={(data: PatientRecord) => {
                 updateRecord(record.id, data).then(() => {
                   records.refetch();
                 });

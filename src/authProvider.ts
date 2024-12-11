@@ -1,20 +1,27 @@
 import { AuthProvider } from "@refinedev/core";
 import api from "./axios";
+import { notifications } from "@mantine/notifications";
+import { User } from "./types";
 
 const authProvider: AuthProvider = {
   login: async (values) => {
     try {
-      await api.post("auth/login", values);
+      const user = await api.post<User>("auth/login", values);
       return {
         success: true,
         redirectTo: "/",
       };
     } catch (error) {
+      notifications.show({
+        title: "Ошибка",
+        message: "Ошибка при авторизации",
+        color: "red",
+      });
       return {
         success: false,
         error: {
-          name: "LoginError",
-          message: "Invalid username or password",
+          name: "Ошибка",
+          message: "Ошибка при авторизации",
         },
       };
     }
