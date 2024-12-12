@@ -8,7 +8,7 @@ import {
   Select,
   TextInput,
 } from "@mantine/core";
-import { DateInput } from "@mantine/dates";
+import { DatePickerInput } from "@mantine/dates";
 import { Patient } from "../../types";
 
 const PatientForm = ({
@@ -62,7 +62,7 @@ const PatientForm = ({
         key={form.key("job_title")}
         {...form.getInputProps("job_title")}
       />
-      <DateInput
+      <DatePickerInput
         valueFormat="DD MM YYYY"
         key={form.key("birthday")}
         {...form.getInputProps("birthday")}
