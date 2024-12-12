@@ -10,16 +10,16 @@ export const PatientCreate = () => {
   return (
     <PatientForm
       handleSubmit={async (values: Patient) => {
+        const date = new Date(new Date(values.birthday || ""))
+          .toLocaleDateString("ru-RU")
+          .slice(0, 10);
+        const parts = date.split(".");
         try {
           await patient.mutateAsync({
             resource: "patient/create",
-            values:{
+            values: {
               ...values,
-              birthday: new Date(
-                new Date(values.birthday || "").setUTCHours(0, 0, 0, 0)
-              )
-                .toISOString()
-                .slice(0, 10),
+              birthday: `${parts[2]}-${parts[1]}-${parts[0]}`,
             },
           });
           list("patient");
