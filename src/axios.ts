@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const baseURL = "https://back.u-hu.site";
+export const baseURL = "https://back.u-hu.site/";
 
 
 const api = axios.create({

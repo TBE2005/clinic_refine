@@ -175,6 +175,15 @@ const Statistics = () => {
     ),
   });
 
+  // Добавляем эффект для обновления графиков при фильтрации
+  React.useEffect(() => {
+    if (!isFiltering && workerRef.current) {
+      setIsCalculating(true);
+      const filteredData = table.getFilteredRowModel().rows.map(row => row.original);
+      workerRef.current.postMessage({ data: filteredData });
+    }
+  }, [table.getFilteredRowModel().rows, isFiltering]);
+
   React.useEffect(() => {
     async function getAll() {
       try {
