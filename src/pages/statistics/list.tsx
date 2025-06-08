@@ -209,12 +209,12 @@ const Statistics = () => {
     const csv = generateCsv(csvConfig)(
       table.getFilteredRowModel().rows.map((e) => {
         return {
-          "День рождения": e.original.birthday,
+          "День рождения": e.original.birthday ? new Date(e.original.birthday).toLocaleDateString('ru-RU') : '',
           Пол: e.original.gender,
           "Населенный пункт": e.original.inhabited_locality,
-          БП: e.original.bp,
-          Ишемия: e.original.ischemia,
-          ДЭП: e.original.dep,
+          БП: e.original.bp ? "Да" : "Нет",
+          Ишемия: e.original.ischemia ? "Да" : "Нет",
+          ДЭП: e.original.dep ? "Да" : "Нет",
         };
       }) as any
     );
