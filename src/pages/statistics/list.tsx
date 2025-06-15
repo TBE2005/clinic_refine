@@ -148,13 +148,22 @@ const Statistics = () => {
       setSorting(newSorting);
       setTimeout(() => setIsFiltering(false), 0);
     },
-    state: { 
-      isLoading: allPatients.isLoading || isFiltering, 
-      sorting 
+    state: {
+      isLoading: allPatients.isLoading || isFiltering,
+      sorting
     },
     rowVirtualizerInstanceRef,
     rowVirtualizerOptions: { overscan: 5 },
     columnVirtualizerOptions: { overscan: 2 },
+    localization: {
+      actions: 'Действия',
+    },
+    displayColumnDefOptions: {
+      'mrt-row-actions': {
+        size: 120, //set custom width for actions column
+        minSize: 120,
+      },
+    },
     renderTopToolbarCustomActions: () => (
       <Box
         style={{
