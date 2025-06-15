@@ -157,6 +157,15 @@ export const PatientList = () => {
     rowVirtualizerInstanceRef, //optional
     rowVirtualizerOptions: { overscan: 5 }, //optionally customize the row virtualizer
     columnVirtualizerOptions: { overscan: 2 }, //optionally customize the column virtualizer
+    localization: {
+      actions: "Действия"
+    },
+    displayColumnDefOptions: {
+      'mrt-row-actions': {
+        size: 120, //set custom width for actions column
+        minSize: 120,
+      },
+    },
     renderTopToolbarCustomActions: () => (
       <Box
         style={{
@@ -205,19 +214,21 @@ export const PatientList = () => {
       </Box>
     ),
     renderRowActions: ({ row }) => (
-      <Flex gap="xs" wrap={'wrap'}>
+      <Flex gap="xs" direction="row" align="center">
         <Tooltip label="Редактировать">
           <ActionIcon
+            variant="light"
             onClick={() => navigation.edit("patient", row.original.id)}
-            size={"sm"}
+            size={"lg"}
           >
             <IconEdit />
           </ActionIcon>
         </Tooltip>
         <Tooltip label="Открыть">
           <ActionIcon
+            variant="light"
             onClick={() => navigation.show("patient", row.original.id)}
-            size={"sm"}
+            size={"lg"}
           >
             <IconEye />
           </ActionIcon>
